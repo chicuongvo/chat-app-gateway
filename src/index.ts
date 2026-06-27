@@ -1,11 +1,9 @@
-import { createServer } from 'http';
 import { createApp } from '@/app';
 import { env } from '@/config/env';
 import { logger } from '@/utils/logger';
 
 const main = async (): Promise<void> => {
-  const app = createApp();
-  const server = createServer(app);
+  const { server } = createApp();
 
   server.listen(env.GATEWAY_PORT, () => {
     logger.info({ port: env.GATEWAY_PORT }, 'API Gateway is running');
@@ -16,6 +14,7 @@ const main = async (): Promise<void> => {
         '/api/conversations': env.CHAT_SERVICE_URL,
         '/api/media': env.MULTIMEDIA_SERVICE_URL,
         '/api/notifications': env.NOTIFICATION_SERVICE_URL,
+        '/events': env.REALTIME_SERVICE_URL,
       },
     }, 'Registered proxy routes');
   });

@@ -26,6 +26,10 @@ interface JwtPayload {
 
 export const authMiddleware: RequestHandler = (req, _res, next) => {
   if (PUBLIC_PATHS.has(req.path)) {
+    // No JWT to verify yet (this *is* the login/register/etc. call), but the
+    // backend's own internal-auth middleware still requires x-internal-token
+    // on every non-/health route — without this, register/login would 401.
+    req.headers['x-internal-token'] = env.INTERNAL_API_TOKEN;
     return next();
   }
 
