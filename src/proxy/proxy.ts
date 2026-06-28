@@ -39,6 +39,14 @@ const routes: ProxyRoute[] = [
     pathRewrite: { '^/': '/conversations/' },
   },
   {
+    // chat-service mounts presence as a sibling route at its root (`/presence`),
+    // not nested under `/conversations` — needs its own mount so the blanket
+    // `/conversations/` rewrite above doesn't swallow it.
+    path: '/api/presence',
+    target: env.CHAT_SERVICE_URL,
+    pathRewrite: { '^/': '/presence' },
+  },
+  {
     path: '/api/media',
     target: env.MULTIMEDIA_SERVICE_URL,
     pathRewrite: { '^/': '/media/' },
