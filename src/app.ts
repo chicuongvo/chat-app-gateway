@@ -20,7 +20,9 @@ export const createApp = (): GatewayApp => {
   // before the 404/error handlers are registered below.
   const server = createServer(app);
 
-  app.use(helmet());
+  // Disable COOP: same-origin so Google Sign-In's popup can postMessage back
+  // to the opener window. All other helmet protections remain on.
+  app.use(helmet({ crossOriginOpenerPolicy: false }));
   // Auth is Bearer-token based (Authorization header), not cookies, so there is
   // no need for credentialed CORS — and `credentials: true` together with a
   // wildcard origin is invalid per the CORS spec (browsers ignore/reject it).
